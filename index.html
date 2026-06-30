@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LEGENDEX — Football G.O.A.T. Analytics Engine</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="LEGENDEX: The ultimate football GOAT analytics engine. Compare legends, build dream teams, run tournament brackets, and determine the greatest player of all time.">
+  <meta property="og:title" content="LEGENDEX — Football G.O.A.T. Analytics Engine">
+  <meta property="og:description" content="Customizable ranking algorithm, Dream XI builder, tournament brackets, and interactive comparison for football legends.">
+  <meta property="og:type" content="website">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="assets/images/legendex-logo.jpg">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="style.css?v=8.2">
+</head>
+<body>
+  <!-- Fullscreen Dynamic Interactive Particle Canvas Background -->
+  <canvas id="bg-canvas" class="bg-canvas-container"></canvas>
+  <div class="bg-video-overlay"></div>
+
+  <!-- Ambient background glowing shapes -->
+  <div class="ambient-glow-orbs">
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+    <div class="ambient-orb orb-3"></div>
+  </div>
+
+  <div class="container">
+    <!-- Header — Sharp Scoreboard Format -->
+    <header class="site-header">
+
+      <!-- Top accent strip -->
+      <div class="header-accent-strip">
+        <div class="header-accent-left"></div>
+        <div style="display:flex;align-items:center;gap:16px;">
+          <div class="header-controls-row" style="display:flex;align-items:center;gap:10px;">
+            <button id="guide-toggle" title="Open User Guide" style="background: rgba(77, 232, 232, 0.1); border: 1px solid rgba(77, 232, 232, 0.3); color: var(--accent-green); cursor: pointer; padding: 4px 10px; border-radius: 4px; font-family: var(--font-sans); font-size: 0.7rem; font-weight: 700; display: flex; align-items: center; gap: 6px; transition: all 0.2s ease; margin: 0; outline: none;">📖 Guide</button>
+            <button class="sound-toggle-btn" id="sound-toggle" title="Toggle Sound" style="margin:0;">🔇</button>
+          </div>
+          <div class="header-live-dot-row">
+            <span class="pulse-red-dot"></span>
+            <span class="header-live-text">LIVE</span>
+            <span class="header-divider">|</span>
+            <span class="header-network">LEGENDEX v3.0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Header Body -->
+      <div class="header-main">
+
+        <!-- Left: Brand Identity -->
+        <div class="header-brand">
+          <img src="assets/images/legendex-logo.jpg" alt="LEGENDEX Logo" id="platform-logo" style="width: 70px; height: 70px; border: 2px solid var(--accent-green); object-fit: cover; flex-shrink: 0;">
+          <div>
+            <div class="header-brand-tag">Football Analytics Platform</div>
+            <h1 id="main-title" style="margin: 0; line-height: 1.1;">LEGENDEX<br><span class="h1-sub">G.O.A.T. Analytics Engine</span></h1>
+            <p class="header-desc" style="margin-top: 4px; font-size: 0.72rem; max-width: 480px;">Dynamic scoring algorithms, Dream XI builder, tournament brackets, and real-time legend rankings.</p>
+          </div>
+        </div>
+
+        <!-- Right: Live Stats HUD -->
+        <div class="header-hud">
+          <div class="hud-stat">
+            <span class="hud-val" id="hero-rank1-score">—</span>
+            <span class="hud-lbl">TOP OVR</span>
+          </div>
+          <div class="hud-divider"></div>
+          <div class="hud-stat">
+            <span class="hud-val" id="header-player-count">20</span>
+            <span class="hud-lbl">LEGENDS</span>
+          </div>
+          <div class="hud-divider"></div>
+          <div class="hud-stat">
+            <span class="hud-val" id="header-leader-name" style="font-size:0.55rem;">—</span>
+            <span class="hud-lbl">CURRENT #1</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bottom Ticker -->
+      <div class="broadcast-ticker-banner">
+        <div class="ticker-label">LIVE FEED</div>
+        <div class="ticker-wrap">
+          <div class="ticker-content" id="broadcast-ticker-content">
+            ⚡ ALGORITHM ACTIVE — Adjust scoring weights to recalculate ranks in real-time &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            ⚽ LEADERBOARD SYNCHRONIZED: Dynamic scoring in progress... &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            🏆 TOP TROPHY WINNER: Messi leads with combined club and international titles... &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            🎮 LIVE FEED: Adjust sliders to trigger instant global database recalculation.
+          </div>
+        </div>
+      </div>
+
+    </header>
+
+    <!-- Tabs Workspace Navigation -->
+    <nav class="workspace-tabs" role="tablist">
+      <button class="tab-btn active" data-target="tab-leaderboard" role="tab" aria-selected="true" aria-controls="tab-leaderboard">
+        <span class="tab-icon">🏆</span> Leaderboard
+      </button>
+      <button class="tab-btn" data-target="tab-comparison" role="tab" aria-selected="false" aria-controls="tab-comparison">
+        <span class="tab-icon">⚔️</span> Comparison Arena
+      </button>
+      <button class="tab-btn" data-target="tab-dreamxi" role="tab" aria-selected="false" aria-controls="tab-dreamxi">
+        <span class="tab-icon">⚽</span> Dream XI
+      </button>
+      <button class="tab-btn" data-target="tab-tournament" role="tab" aria-selected="false" aria-controls="tab-tournament">
+        <span class="tab-icon">⚡</span> Tournament
+      </button>
+      <button class="tab-btn" data-target="tab-datacenter" role="tab" aria-selected="false" aria-controls="tab-datacenter">
+        <span class="tab-icon">📊</span> Data Center
+      </button>
+    </nav>
+
+    <!-- Tab 1: Leaderboard & Sliders -->
+    <div id="tab-leaderboard" class="tab-content active" role="tabpanel" aria-labelledby="tab-leaderboard">
+      <main class="dashboard-grid">
+      
+      <!-- Left Column: Weights Configuration -->
+      <section class="panel config-panel" aria-labelledby="config-title">
+        <h2 id="config-title" class="panel-title">
+          <span class="accent">⚡</span> Scoring Criteria
+        </h2>
+        
+        <!-- Presets Row -->
+        <div class="control-group" style="margin-bottom: 20px;">
+          <div class="control-label-row" style="margin-bottom: 8px;">
+            <label class="control-label">Algorithm Presets</label>
+            <button id="share-algo-btn" style="background: none; border: none; color: var(--accent-green); font-size: 0.8rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 0;">
+              <span>🔗</span> Copy Share Link
+            </button>
+          </div>
+          <div class="presets-container" id="presets-container">
+            <button class="btn-preset active" data-preset="balanced" id="preset-balanced">Balanced</button>
+            <button class="btn-preset" data-preset="scorers" id="preset-scorers">Goal Bias</button>
+            <button class="btn-preset" data-preset="playmakers" id="preset-playmakers">Playmaker</button>
+            <button class="btn-preset" data-preset="trophies" id="preset-trophies">Trophies</button>
+            <button class="btn-preset" data-preset="peak" id="preset-peak">Peak Prime</button>
+            <button class="btn-preset" data-preset="longevity" id="preset-longevity">Longevity</button>
+            <button class="btn-preset" id="save-preset-btn" style="border-style: dashed; border-color: var(--accent-green); color: var(--accent-green);">+ Save Preset</button>
+          </div>
+        </div>
+
+        <!-- Metric Sliders -->
+        <div class="weight-controls" id="weight-controls">
+          
+          <div class="control-group">
+            <div class="control-label-row">
+              <label for="weight-goals" class="control-label">Goals (All-Time)</label>
+              <span class="control-value" id="val-goals">5</span>
+            </div>
+            <input type="range" id="weight-goals" class="weight-slider" data-metric="goals" min="0" max="10" value="5">
+          </div>
+
+          <div class="control-group">
+            <div class="control-label-row">
+              <label for="weight-assists" class="control-label">Assists (All-Time)</label>
+              <span class="control-value" id="val-assists">5</span>
+            </div>
+            <input type="range" id="weight-assists" class="weight-slider" data-metric="assists" min="0" max="10" value="5">
+          </div>
+
+          <div class="control-group">
+            <div class="control-label-row">
+              <label for="weight-clubTitles" class="control-label">Major Club Titles</label>
+              <span class="control-value" id="val-clubTitles">5</span>
+            </div>
+            <input type="range" id="weight-clubTitles" class="weight-slider" data-metric="clubTitles" min="0" max="10" value="5">
+          </div>
+
+          <div class="control-group">
+            <div class="control-label-row">
+              <label for="weight-internationalTitles" class="control-label">International Trophies</label>
+              <span class="control-value" id="val-internationalTitles">5</span>
+            </div>
+            <input type="range" id="weight-internationalTitles" class="weight-slider" data-metric="internationalTitles" min="0" max="10" value="5">
+          </div>
+
+          <div class="control-group">
+            <div class="control-label-row">
+              <label for="weight-ballondOr" class="control-label">Ballon d'Or Wins</label>
+              <span class="control-value" id="val-ballondOr">5</span>
+            </div>
+            <input type="range" id="weight-ballondOr" class="weight-slider" data-metric="ballondOr" min="0" max="10" value="5">
+          </div>
+
+          <div class="control-group">
+            <div class="control-label-row">
+              <label for="weight-individualAwards" class="control-label">Individual Awards</label>
+              <span class="control-value" id="val-individualAwards">5</span>
+            </div>
+            <input type="range" id="weight-individualAwards" class="weight-slider" data-metric="individualAwards" min="0" max="10" value="5">
+          </div>
+
+          <div class="control-group">
+            <div class="control-label-row">
+              <label for="weight-longevityScore" class="control-label">Career Longevity</label>
+              <span class="control-value" id="val-longevityScore">5</span>
+            </div>
+            <input type="range" id="weight-longevityScore" class="weight-slider" data-metric="longevityScore" min="0" max="10" value="5">
+          </div>
+
+          <div class="control-group">
+            <div class="control-label-row">
+              <label for="weight-peakScore" class="control-label">Peak Performance</label>
+              <span class="control-value" id="val-peakScore">5</span>
+            </div>
+            <input type="range" id="weight-peakScore" class="weight-slider" data-metric="peakScore" min="0" max="10" value="5">
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Right Column: G.O.A.T. Rankings & Lineup View -->
+      <section class="panel ranking-panel" aria-labelledby="ranking-title" style="flex-grow: 1;">
+        <div class="panel-header-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
+          <h2 id="ranking-title" class="panel-title" style="margin-bottom: 0; border-bottom: none; padding-bottom: 0; display: flex; align-items: center; gap: 10px;">
+            <span class="accent">🏆</span> G.O.A.T. Leaderboard
+          </h2>
+          
+          <!-- View Toggle Sub-Tabs -->
+          <div class="view-toggle-container" style="display: flex; background: rgba(7, 9, 14, 0.45); padding: 4px; border-radius: var(--radius-sm); border: 1.5px solid var(--border-color);">
+            <button class="view-toggle-btn active" id="toggle-list-btn" style="padding: 6px 14px; background: rgba(70, 172, 211, 0.15); border: 1.5px solid rgba(70, 172, 211, 0.4); border-radius: 4px; color: var(--accent-green); font-family: var(--font-sans); font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: all 0.2s ease;">
+              📋 Roster List
+            </button>
+            <button class="view-toggle-btn" id="toggle-pitch-btn" style="padding: 6px 14px; background: none; border: 1.5px solid transparent; border-radius: 4px; color: var(--text-secondary); font-family: var(--font-sans); font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: all 0.2s ease; margin-left: 4px;">
+              ⚽ Tactical Pitch
+            </button>
+          </div>
+        </div>
+
+        <!-- Era Filter -->
+        <div class="era-filter-row">
+          <label for="era-filter">Era</label>
+          <select class="era-filter-select" id="era-filter">
+            <option value="all">All Eras</option>
+            <option value="1950">1950s-60s Pioneers</option>
+            <option value="1970">1970s-80s Legends</option>
+            <option value="1990">1990s-2000s Stars</option>
+            <option value="2000">2000s+ Modern Era</option>
+          </select>
+        </div>
+
+        <!-- AI GOAT Verdict Card -->
+        <div class="ai-verdict-card" id="ai-verdict-card">
+          <div class="ai-verdict-header">
+            <span class="ai-badge">AI</span>
+            <span class="ai-verdict-label">GOAT Analysis Verdict</span>
+          </div>
+          <p class="ai-verdict-text" id="ai-verdict-text">Analyzing current algorithm weights...</p>
+        </div>
+
+        <!-- Search input container (only visible in Roster List view) -->
+        <div id="leaderboard-search-container" style="margin-bottom: 16px; position: relative;">
+          <input type="text" id="leaderboard-search" placeholder="🔍 Search name, nation, position, or trophy (e.g. World Cup)..." style="width: 100%; padding: 12px 16px; background: rgba(7, 9, 14, 0.4); border: 1px solid var(--border-color); color: var(--text-primary); font-family: var(--font-sans); font-size: 0.85rem; outline: none; transition: var(--transition-smooth);" onfocus="this.style.borderColor='var(--accent-green)';" onblur="this.style.borderColor='var(--border-color)';">
+        </div>
+
+        <!-- View 1: Roster List (Default) -->
+        <div class="leaderboard-list" id="leaderboard-list">
+          <!-- Dynamic Leaderboard Cards Loaded via script.js -->
+        </div>
+
+        <!-- View 2: Tactical Soccer Pitch (Hidden by default) -->
+        <div class="tactical-pitch" id="tactical-pitch" style="display: none;">
+          <div class="pitch-line center-line"></div>
+          <div class="pitch-line center-circle"></div>
+          <div class="pitch-line penalty-box top"></div>
+          <div class="pitch-line penalty-box bottom"></div>
+          <div class="pitch-line goal top"></div>
+          <div class="pitch-line goal bottom"></div>
+          
+          <div class="pitch-players-container" id="pitch-players-container">
+            <!-- Dynamic Player Nodes loaded via script.js -->
+          </div>
+        </div>
+      </section>
+
+      </main>
+    </div>
+
+    <!-- Tab 2: Comparison Arena -->
+    <div id="tab-comparison" class="tab-content" role="tabpanel" aria-labelledby="tab-comparison" style="display: none;">
+      <section class="panel comparison-arena" aria-labelledby="comparison-title" style="margin-top: 0;">
+      <h2 id="comparison-title" class="panel-title" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+        <span style="display: flex; align-items: center; gap: 10px;"><span class="accent">⚔️</span> GOAT Comparison Arena</span>
+        <div style="display: flex; gap: 10px;">
+          <button id="simulate-match-btn" class="btn-preset" style="padding: 6px 14px; border-radius: 6px; display: flex; align-items: center; gap: 6px; margin: 0; background: rgba(139, 92, 246, 0.1); border-color: rgba(139, 92, 246, 0.3); color: var(--accent-purple);">
+            <span>🎮</span> Simulate Match
+          </button>
+          <button id="export-chart-btn" class="btn-preset" style="padding: 6px 14px; border-radius: 6px; display: flex; align-items: center; gap: 6px; margin: 0; background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3); color: var(--accent-green);">
+            <span>📥</span> Export Chart
+          </button>
+        </div>
+      </h2>
+      
+      <!-- Sleek Horizontal HUD Selection Bar (Always Visible) -->
+      <div class="arena-selectors-hud">
+        <div class="hud-selector-group">
+          <span class="hud-badge p1">P1</span>
+          <select id="compare-p1" class="hud-select-input"></select>
+        </div>
+        <div class="hud-vs-divider">VS</div>
+        <div class="hud-selector-group">
+          <span class="hud-badge p2">P2</span>
+          <select id="compare-p2" class="hud-select-input"></select>
+        </div>
+        <div class="hud-vs-divider optional-vs">VS</div>
+        <div class="hud-selector-group optional-p3">
+          <span class="hud-badge p3">P3</span>
+          <select id="compare-p3" class="hud-select-input"></select>
+        </div>
+      </div>
+
+      <!-- Symmetrical Matchup Deck & Wide Predictor Center -->
+      <div class="matchup-arena-display">
+        <!-- Centered active player cards deck -->
+        <div class="matchup-cards-deck" id="matchup-cards-deck">
+          <div class="slot-card-wrapper" id="vs-player1-card" style="display: none;"></div>
+          
+          <div class="vs-center-badge-floating" id="vs-center-badge-floating" style="display: none;">
+            <div class="vs-logo-text">VS</div>
+          </div>
+          
+          <div class="slot-card-wrapper" id="vs-player2-card" style="display: none;"></div>
+          <div class="slot-card-wrapper" id="vs-player3-card" style="display: none;"></div>
+        </div>
+
+        <!-- Wide horizontal TV Analytics win probability bar -->
+        <div class="broadcast-predictor-hud" id="vs-live-score">
+          <div class="predictor-empty-msg">SELECT PLAYER 1 & 2 TO START MATCH PREDICTION</div>
+        </div>
+      </div>
+
+      <!-- Comparison Visualizers -->
+      <div class="comparison-visualizer">
+        
+        <!-- Radar Chart Outer -->
+        <div>
+          <div class="radar-chart-container" id="radar-chart-container">
+            <!-- Custom SVG Radar Chart Rendered via script.js -->
+          </div>
+          <div class="comparison-legend">
+            <div class="legend-item"><div class="legend-color p1"></div> Player 1</div>
+            <div class="legend-item"><div class="legend-color p2"></div> Player 2</div>
+            <div class="legend-item"><div class="legend-color p3"></div> Player 3</div>
+          </div>
+        </div>
+
+        <!-- Comparative Stats Table -->
+        <div class="comparison-table-wrapper">
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>Metric</th>
+                <th>Player 1</th>
+                <th>Player 2</th>
+                <th>Player 3</th>
+              </tr>
+            </thead>
+            <tbody id="comparison-table-body">
+              <!-- Comparison Rows Loaded via script.js -->
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- Simulation Arena Ticker Console -->
+      <div id="simulation-console" style="display: none; margin-top: 32px; border: 1px solid rgba(139, 92, 246, 0.2); border-radius: var(--radius-md); background: rgba(13, 18, 31, 0.6); backdrop-filter: blur(12px); padding: 24px; box-shadow: 0 8px 32px rgba(139, 92, 246, 0.1);">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 12px; margin-bottom: 16px;">
+          <h4 style="font-family: var(--font-display); color: #c084fc; display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 1.2rem;">🎙️</span> G.O.A.T. Match Commentary
+          </h4>
+          <span id="simulation-status" style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 6px;">
+            <span id="live-dot" style="display: none; width: 8px; height: 8px; border-radius: 50%; background: #ef4444; box-shadow: 0 0 8px #ef4444;"></span>
+            <span id="status-text">Warm Up...</span>
+          </span>
+        </div>
+        
+        <!-- Commentary Feed -->
+        <div id="commentary-feed" style="min-height: 120px; max-height: 200px; overflow-y: auto; font-family: monospace; font-size: 0.9rem; line-height: 1.6; color: var(--text-secondary); display: flex; flex-direction: column; gap: 8px;">
+          <!-- Lines added dynamically -->
+        </div>
+
+        <!-- Scoreboard Card -->
+        <div id="simulation-scoreboard" style="display: none; justify-content: center; align-items: center; gap: 32px; margin-top: 24px; padding-top: 16px; border-top: 1px solid rgba(255, 255, 255, 0.05);">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <!-- Radar Chart Comparison -->
+      <div class="radar-comparison-section" id="radar-comparison-section" style="display:none;">
+        <h3>Attribute Radar Comparison</h3>
+        <div id="radar-chart-container"></div>
+        <div class="radar-legend">
+          <div class="radar-legend-item"><span class="radar-legend-swatch p1"></span><span id="radar-p1-name">Player 1</span></div>
+          <div class="radar-legend-item"><span class="radar-legend-swatch p2"></span><span id="radar-p2-name">Player 2</span></div>
+        </div>
+      </div>
+
+      </section>
+    </div>
+
+    <!-- Tab 3: Dream XI -->
+    <div id="tab-dreamxi" class="tab-content" role="tabpanel" aria-labelledby="tab-dreamxi" style="display: none;">
+      <section class="panel" style="margin-top: 0;">
+        <h2 class="panel-title"><span class="accent">⚽</span> Build Your Dream XI</h2>
+        <div class="dreamxi-layout">
+          <!-- Pitch -->
+          <div class="dreamxi-pitch" id="dreamxi-pitch">
+            <!-- 4-3-3 Formation Slots — positioned via JS -->
+          </div>
+          <!-- Sidebar -->
+          <div class="dreamxi-sidebar">
+            <div class="dreamxi-ovr-display">
+              <div class="dreamxi-ovr-value" id="dreamxi-ovr">—</div>
+              <div class="dreamxi-ovr-label">Team OVR Rating</div>
+            </div>
+            <div class="dreamxi-actions">
+              <button id="dreamxi-clear-btn">Clear All</button>
+            </div>
+            <div class="dreamxi-roster" id="dreamxi-roster">
+              <h4>Available Legends</h4>
+              <!-- Populated via JS -->
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Tab 4: Tournament Bracket -->
+    <div id="tab-tournament" class="tab-content" role="tabpanel" aria-labelledby="tab-tournament" style="display: none;">
+      <section class="panel" style="margin-top: 0;">
+        <h2 class="panel-title"><span class="accent">⚡</span> Knockout Tournament</h2>
+        <div class="tournament-controls">
+          <button id="tournament-generate-btn">🎲 Generate Bracket</button>
+          <button id="tournament-simulate-btn" disabled>▶ Simulate All Rounds</button>
+        </div>
+        <div class="bracket-grid" id="bracket-grid">
+          <p style="color: var(--text-muted); font-family: var(--font-sans); font-size: 0.82rem;">Click "Generate Bracket" to seed the legends into a knockout tournament.</p>
+        </div>
+        <div id="tournament-champion-display"></div>
+      </section>
+    </div>
+
+    <!-- Tab 5: Data Center -->
+    <div id="tab-datacenter" class="tab-content" role="tabpanel" aria-labelledby="tab-datacenter" style="display: none;">
+      <section class="panel data-center-section" aria-labelledby="datacenter-title" style="margin-top: 0;">
+        <h2 id="datacenter-title" class="panel-title" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+        <span style="display: flex; align-items: center; gap: 10px;"><span class="accent">📊</span> G.O.A.T. Data Center</span>
+        <div style="display: flex; gap: 10px;">
+          <button id="reset-db-btn" class="btn-preset" style="background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3); color: #f87171;">Reset Dashboard</button>
+          <button id="add-metric-btn" class="btn-preset" style="background: rgba(6, 182, 212, 0.1); border-color: rgba(6, 182, 212, 0.3); color: var(--accent-blue);">+ Add Custom Metric</button>
+          <button id="add-player-btn" class="btn-preset" style="background: rgba(139, 92, 246, 0.1); border-color: rgba(139, 92, 246, 0.3); color: var(--accent-purple);">+ Add New Legend</button>
+        </div>
+      </h2>
+      
+      <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 20px;">
+        Interactive statistical grid. Click inside any cell to modify a value in real-time. Press Enter or click outside to save. Changes dynamically update rankings.
+      </p>
+      <!-- Live Database Summary Widget Cards -->
+      <div class="db-summary-cards" id="db-summary-cards" style="margin-bottom: 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+        <!-- Card 1: Top Goalscorer -->
+        <div class="db-summary-card" id="summary-top-scorer">
+          <div class="summary-card-inner">
+            <span class="icon">⚽</span>
+            <div class="meta">
+              <span class="lbl">Top Goalscorer</span>
+              <span class="name" id="top-scorer-name">Loading...</span>
+            </div>
+            <span class="val" id="top-scorer-val">0</span>
+          </div>
+        </div>
+        <!-- Card 2: Playmaker King -->
+        <div class="db-summary-card" id="summary-top-playmaker">
+          <div class="summary-card-inner">
+            <span class="icon">🪄</span>
+            <div class="meta">
+              <span class="lbl">Playmaker King</span>
+              <span class="name" id="top-playmaker-name">Loading...</span>
+            </div>
+            <span class="val" id="top-playmaker-val">0</span>
+          </div>
+        </div>
+        <!-- Card 3: Most Trophies -->
+        <div class="db-summary-card" id="summary-top-trophies">
+          <div class="summary-card-inner">
+            <span class="icon">🏆</span>
+            <div class="meta">
+              <span class="lbl">Most Decorated</span>
+              <span class="name" id="top-trophies-name">Loading...</span>
+            </div>
+            <span class="val" id="top-trophies-val">0</span>
+          </div>
+        </div>
+      </div>
+      <!-- Spreadsheet Grid Wrapper -->
+      <div class="spreadsheet-wrapper" style="overflow-x: auto; border: 1px solid var(--border-color); background: rgba(7, 9, 14, 0.2);">
+        <table class="spreadsheet-table" id="spreadsheet-table" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
+          <!-- Generated Dynamically via script.js -->
+        </table>
+      </div>
+
+      <!-- Achievements Segment -->
+      <div class="achievements-section" style="margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border-color);">
+        <h3 class="panel-subtitle" style="font-family: var(--font-display); font-size: 0.75rem; font-weight: 700; color: var(--accent-gold); text-transform: uppercase; margin-bottom: 16px;">
+          🏅 Achievements Showcase
+        </h3>
+        <div class="achievement-gallery" id="achievement-gallery">
+          <!-- Dynamically Loaded via script.js -->
+        </div>
+      </div>
+      </section>
+    </div>
+
+    <!-- Page Footer -->
+    <footer>
+      <p>Created for VibeCode Arena Challenge &copy; 2026. Interactive algorithm by Antigravity AI.</p>
+    </footer>
+  </div>
+
+  <!-- Player Details Modal Window -->
+  <div class="modal-overlay" id="player-modal" style="display: none;">
+    <div class="modal-content">
+      <button class="modal-close-btn" id="modal-close" aria-label="Close details">&times;</button>
+      
+      <!-- Modal Hero Header -->
+      <div class="modal-header-hero">
+        <div class="modal-header-bg" id="modal-header-bg"></div>
+        <div class="modal-header-gradient"></div>
+        <div class="modal-player-meta">
+          <div class="modal-player-tag">Legend Profile</div>
+          <h3 class="modal-player-name" id="modal-player-name">Player Name</h3>
+          <div class="modal-player-subrow" id="modal-player-meta-info">Argentina | Forward | 2004 - Present</div>
+        </div>
+        <button class="whatif-toggle-btn" id="whatif-toggle" style="position: absolute; right: 24px; bottom: 18px; z-index: 10;">🔮 Edit Stats</button>
+      </div>
+
+      <!-- Modal Info Body -->
+      <div class="modal-body">
+        
+        <!-- Left Side: Stats and Bio -->
+        <div class="modal-left-col">
+          <div>
+            <h4 class="modal-section-title">Biography</h4>
+            <p class="bio-text" id="modal-bio">Bio content goes here...</p>
+          </div>
+          
+          <div>
+            <h4 class="modal-section-title">Career Statistics</h4>
+            <div class="stats-grid-modal" id="modal-stats-grid">
+              <!-- Grid Values Generated dynamically -->
+            </div>
+            <div class="whatif-actions" id="whatif-actions-panel" style="display: none; justify-content: flex-end; align-items: center; gap: 12px; margin-top: 16px;">
+              <span class="whatif-rank-delta neutral" id="whatif-rank-delta">—</span>
+              <button id="whatif-apply-btn" class="apply-btn">Apply What-If</button>
+              <button id="whatif-reset-btn">Reset</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side: Radar Chart and Achievements -->
+        <div class="modal-right-col">
+          <div>
+            <h4 class="modal-section-title">Attribute Spectrum</h4>
+            <div id="modal-radar-container" style="display:flex; justify-content:center; align-items:center; min-height:220px; background: rgba(0,0,0,0.15); border-radius: var(--radius-sm);">
+              <!-- Modal Mini Radar Chart SVG -->
+            </div>
+          </div>
+
+          <div>
+            <h4 class="modal-section-title">Key Career Accolades</h4>
+            <div class="achievements-list" id="modal-achievements">
+              <!-- Accolades Loaded dynamically -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom HUD System Dialog Modal -->
+  <div class="custom-dialog-overlay" id="custom-dialog-overlay" style="display: none;">
+    <div class="custom-dialog-box">
+      <h3 id="custom-dialog-title">System Message</h3>
+      <p id="custom-dialog-message">Details here...</p>
+      
+      <!-- Input container (for prompt style) -->
+      <div id="custom-dialog-input-container" style="display: none; margin: 16px 0;">
+        <input type="text" id="custom-dialog-input" class="custom-dialog-text-input" placeholder="Enter value...">
+      </div>
+      
+      <!-- Buttons container -->
+      <div class="custom-dialog-actions" id="custom-dialog-actions">
+        <button class="dialog-btn confirm-btn" id="dialog-confirm-btn">Confirm</button>
+        <button class="dialog-btn cancel-btn" id="dialog-cancel-btn">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom ADD NEW LEGEND Form Modal -->
+  <div class="modal-overlay" id="add-player-modal" style="display: none;">
+    <div class="modal-content" style="max-width: 480px;">
+      <button class="modal-close-btn" id="add-player-modal-close" aria-label="Close form">&times;</button>
+      
+      <div class="modal-header-hero" style="min-height: 90px; padding: 18px 24px;">
+        <div class="modal-player-meta">
+          <div class="modal-player-tag">Squad Registration</div>
+          <h3 class="modal-player-name" style="font-size: 1.4rem;">Add Custom Legend</h3>
+        </div>
+      </div>
+      
+      <div class="modal-body" style="padding: 24px; display: block;">
+        <form id="add-player-form" style="display: flex; flex-direction: column; gap: 16px;">
+          <div class="form-group" style="display:flex; flex-direction:column; gap:4px;">
+            <label for="new-player-name" style="font-size: 0.75rem; font-weight:700; text-transform:uppercase; color:var(--accent-gold);">Legend Full Name</label>
+            <input type="text" id="new-player-name" required placeholder="e.g. Ronaldinho" style="padding: 10px 14px; background: rgba(7, 9, 14, 0.4); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-primary); outline: none;">
+          </div>
+          
+          <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="form-group" style="display:flex; flex-direction:column; gap:4px;">
+              <label for="new-player-nationality" style="font-size: 0.75rem; font-weight:700; text-transform:uppercase; color:var(--accent-gold);">Nationality</label>
+              <input type="text" id="new-player-nationality" required placeholder="e.g. Brazil" style="padding: 10px 14px; background: rgba(7, 9, 14, 0.4); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-primary); outline: none;">
+            </div>
+            
+            <div class="form-group" style="display:flex; flex-direction:column; gap:4px;">
+              <label for="new-player-countrycode" style="font-size: 0.75rem; font-weight:700; text-transform:uppercase; color:var(--accent-gold);">Country Code (2-Letters)</label>
+              <input type="text" id="new-player-countrycode" required maxlength="2" placeholder="e.g. BR" style="padding: 10px 14px; background: rgba(7, 9, 14, 0.4); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-primary); outline: none; text-transform: uppercase;">
+            </div>
+          </div>
+          
+          <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="form-group" style="display:flex; flex-direction:column; gap:4px;">
+              <label for="new-player-position" style="font-size: 0.75rem; font-weight:700; text-transform:uppercase; color:var(--accent-gold);">Position</label>
+              <input type="text" id="new-player-position" required placeholder="e.g. Forward" style="padding: 10px 14px; background: rgba(7, 9, 14, 0.4); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-primary); outline: none;">
+            </div>
+            
+            <div class="form-group" style="display:flex; flex-direction:column; gap:4px;">
+              <label for="new-player-years" style="font-size: 0.75rem; font-weight:700; text-transform:uppercase; color:var(--accent-gold);">Active Years</label>
+              <input type="text" id="new-player-years" required placeholder="e.g. 1998 - 2015" style="padding: 10px 14px; background: rgba(7, 9, 14, 0.4); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-primary); outline: none;">
+            </div>
+          </div>
+          
+          <button type="submit" class="btn-preset" style="padding: 12px; margin-top: 12px; font-weight: 700; background: rgba(70, 172, 211, 0.15); border-color: rgba(70, 172, 211, 0.4); color: var(--accent-green); text-transform: uppercase; cursor: pointer; width: 100%;">
+            Register Player
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- User Guide Modal -->
+  <div class="modal-overlay" id="guide-modal" role="dialog" aria-modal="true" aria-labelledby="guide-modal-title" style="display: none;">
+    <div class="modal-content" style="max-width: 600px;">
+      <button class="modal-close-btn" id="close-guide-modal" aria-label="Close Modal">&times;</button>
+      <div class="modal-header-hero" style="height: 120px; background: linear-gradient(135deg, rgba(8, 22, 27, 0.95) 0%, rgba(12, 32, 37, 0.9) 100%); display: flex; flex-direction: column; justify-content: center; padding: 24px; border-bottom: 1.5px solid var(--border-color);">
+        <div style="font-family: var(--font-display); font-size: 0.55rem; font-weight: 900; letter-spacing: 0.2em; color: var(--accent-green); text-transform: uppercase; margin-bottom: 4px;">Explore Platform</div>
+        <h2 id="guide-modal-title" style="font-family: var(--font-display); font-size: 1.6rem; font-weight: 900; color: var(--text-primary); margin: 0; text-shadow: 0 0 10px var(--accent-green-glow);">📖 LEGENDEX USER GUIDE</h2>
+      </div>
+      <div class="modal-body" style="padding: 24px; max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; font-family: var(--font-sans); color: var(--text-secondary); line-height: 1.6;">
+        <div>
+          <h3 style="color: var(--accent-gold); font-family: var(--font-display); font-size: 0.85rem; margin-bottom: 8px; text-transform: uppercase;">🎚️ 1. G.O.A.T. Algorithm</h3>
+          <p style="font-size: 0.8rem;">Drag the scoring sliders on the left (or select presets like <em>Playmaker</em> or <em>Prime Peak</em>) to weigh what defines greatness. The leaderboard updates instantly!</p>
+        </div>
+        <div>
+          <h3 style="color: var(--accent-gold); font-family: var(--font-display); font-size: 0.85rem; margin-bottom: 8px; text-transform: uppercase;">🔮 2. What-If Engine & Modal Profiles</h3>
+          <p style="font-size: 0.8rem;">Click any player card to inspect their stats. Click <strong>Edit Stats</strong> to modify values, and click <strong>Apply What-If</strong> to watch their rank change with live deltas (e.g. +2 ↑).</p>
+        </div>
+        <div>
+          <h3 style="color: var(--accent-gold); font-family: var(--font-display); font-size: 0.85rem; margin-bottom: 8px; text-transform: uppercase;">⚔️ 3. VS Arena (Comparison)</h3>
+          <p style="font-size: 0.8rem;">Compare up to 3 players side-by-side using the dropdowns. Inspect their overlay polygons on the dynamic <strong>Radar Chart</strong> and check head-to-head win predictions.</p>
+        </div>
+        <div>
+          <h3 style="color: var(--accent-gold); font-family: var(--font-display); font-size: 0.85rem; margin-bottom: 8px; text-transform: uppercase;">🛡️ 4. Build Dream XI Lineup</h3>
+          <p style="font-size: 0.8rem;">Click positions on the field pitch to assign legends. The system compiles the team OVR rating dynamically based on your current custom algorithm.</p>
+        </div>
+        <div>
+          <h3 style="color: var(--accent-gold); font-family: var(--font-display); font-size: 0.85rem; margin-bottom: 8px; text-transform: uppercase;">⚡ 5. Tournament Bracket</h3>
+          <p style="font-size: 0.8rem;">Seed the top 8 players into a knockout tournament. Run matchup simulations complete with synthesized whistles, stadium crown noise, and victory fanfares.</p>
+        </div>
+        <div>
+          <h3 style="color: var(--accent-gold); font-family: var(--font-display); font-size: 0.85rem; margin-bottom: 8px; text-transform: uppercase;">📊 6. Achievements & Spreadsheet</h3>
+          <p style="font-size: 0.8rem;">Complete 8 hidden tasks to unlock badges inside the Data Center. Click cells directly inside the interactive grid to modify records in real-time!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Achievement Toast Container -->
+  <div class="achievement-toast" id="achievement-toast">
+    <span class="achievement-toast-icon" id="achievement-toast-icon">🏅</span>
+    <div class="achievement-toast-body">
+      <span class="achievement-toast-title" id="achievement-toast-title">Achievement Unlocked!</span>
+      <span class="achievement-toast-desc" id="achievement-toast-desc">Description</span>
+    </div>
+  </div>
+
+  <!-- Javascript Modules/Scripts -->
+  <script src="players-data.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="sounds.js?v=1.1"></script>
+  <script src="script.js?v=7.7"></script>
+</body>
+</html>
