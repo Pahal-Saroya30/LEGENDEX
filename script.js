@@ -2394,67 +2394,7 @@ window.generateGOATVerdict = function(player, weights) {
   return templates[Math.floor(Math.random() * templates.length)];
 };
 
-// ========== RADAR CHART ==========
-window.renderRadarChart = function(p1, p2) {
-  const container = document.getElementById('radar-chart-container');
-  const section = document.getElementById('radar-comparison-section');
-  if (!container || !section || !p1 || !p2) { if (section) section.style.display = 'none'; return; }
-  
-  section.style.display = 'block';
-  document.getElementById('radar-p1-name').textContent = p1.name;
-  document.getElementById('radar-p2-name').textContent = p2.name;
-  
-  const metrics = ['goals','assists','clubTitles','internationalTitles','ballondOr','individualAwards','longevityScore','peakScore'];
-  const labels = ['Goals','Assists','Club','Int\'l','BdOr','Awards','Long.','Peak'];
-  const maxVals = { goals: 900, assists: 400, clubTitles: 40, internationalTitles: 6, ballondOr: 8, individualAwards: 60, longevityScore: 100, peakScore: 100 };
-  
-  const cx = 180, cy = 180, r = 140;
-  const n = metrics.length;
-  
-  function getPoint(idx, val, max) {
-    const angle = (Math.PI * 2 * idx / n) - Math.PI / 2;
-    const ratio = Math.min(val / max, 1);
-    return { x: cx + r * ratio * Math.cos(angle), y: cy + r * ratio * Math.sin(angle) };
-  }
-  
-  // Grid rings
-  let gridHtml = '';
-  [0.25, 0.5, 0.75, 1].forEach(pct => {
-    const pts = [];
-    for (let i = 0; i < n; i++) {
-      const angle = (Math.PI * 2 * i / n) - Math.PI / 2;
-      pts.push(`${cx + r * pct * Math.cos(angle)},${cy + r * pct * Math.sin(angle)}`);
-    }
-    gridHtml += `<polygon points="${pts.join(' ')}" fill="none" stroke="rgba(77,232,232,0.08)" stroke-width="1"/>`;
-  });
-  
-  // Axis lines + labels
-  let axisHtml = '';
-  for (let i = 0; i < n; i++) {
-    const angle = (Math.PI * 2 * i / n) - Math.PI / 2;
-    const ex = cx + r * Math.cos(angle), ey = cy + r * Math.sin(angle);
-    const lx = cx + (r + 18) * Math.cos(angle), ly = cy + (r + 18) * Math.sin(angle);
-    axisHtml += `<line x1="${cx}" y1="${cy}" x2="${ex}" y2="${ey}" stroke="rgba(77,232,232,0.1)" stroke-width="1"/>`;
-    axisHtml += `<text x="${lx}" y="${ly}" class="radar-axis-label" text-anchor="middle" dominant-baseline="middle">${labels[i]}</text>`;
-  }
-  
-  // Player polygons
-  const p1Pts = metrics.map((m, i) => { const p = getPoint(i, p1.stats[m] || 0, maxVals[m]); return `${p.x},${p.y}`; }).join(' ');
-  const p2Pts = metrics.map((m, i) => { const p = getPoint(i, p2.stats[m] || 0, maxVals[m]); return `${p.x},${p.y}`; }).join(' ');
-  
-  container.innerHTML = `
-    <svg class="radar-chart-svg" viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg">
-      ${gridHtml}${axisHtml}
-      <polygon points="${p1Pts}" class="radar-polygon-p1"/>
-      <polygon points="${p2Pts}" class="radar-polygon-p2"/>
-    </svg>
-  `;
-  
-  // Animate with GSAP
-  if (typeof gsap !== 'undefined') {
-    gsap.fromTo(section, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' });
-  }
-};
+
 
 // ========== DREAM XI ==========
 (function() {

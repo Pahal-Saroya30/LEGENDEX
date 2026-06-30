@@ -4007,3 +4007,271 @@ footer a:hover {
     padding: 10px;
   }
 }
+
+/* ==========================================================================
+   ACCESSIBILITY & CODE QUALITY CLEANUP - STYLES MOVED FROM INLINE
+   ========================================================================== */
+
+/* Header controls & flex containers */
+.flex-center-gap {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.header-controls-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.guide-toggle-btn {
+  background: rgba(77, 232, 232, 0.1);
+  border: 1px solid rgba(77, 232, 232, 0.3);
+  color: var(--accent-green);
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  margin: 0;
+  outline: none;
+}
+.sound-toggle-style {
+  margin: 0;
+}
+.h1-brand-title {
+  margin: 0;
+  line-height: 1.1;
+}
+.header-desc-style {
+  margin-top: 4px;
+  font-size: 0.72rem;
+  max-width: 480px;
+}
+.hud-leader-name {
+  font-size: 0.55rem;
+}
+
+/* Control group layout */
+.control-group-mb20 {
+  margin-bottom: 20px;
+}
+.control-label-row-mb8 {
+  margin-bottom: 8px;
+}
+.share-algo-btn-style {
+  background: none;
+  border: none;
+  color: var(--accent-green);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+}
+.preset-add-btn {
+  border-style: dashed !important;
+  border-color: var(--accent-green) !important;
+  color: var(--accent-green) !important;
+}
+
+/* Leaderboard custom styles */
+.leaderboard-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 12px;
+}
+.leaderboard-title-flex {
+  margin-bottom: 0 !important;
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.view-toggle-wrapper {
+  display: flex;
+  background: rgba(7, 9, 14, 0.45);
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border-color);
+}
+.view-toggle-list-btn {
+  padding: 6px 14px;
+  background: rgba(70, 172, 211, 0.15);
+  border: 1.5px solid rgba(70, 172, 211, 0.4);
+  border-radius: 4px;
+  color: var(--accent-green);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.view-toggle-pitch-btn {
+  padding: 6px 14px;
+  background: none;
+  border: 1.5px solid transparent;
+  border-radius: 4px;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: 4px;
+}
+.search-input-style {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(7, 9, 14, 0.4);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  outline: none;
+  transition: var(--transition-smooth);
+}
+.search-input-container {
+  margin-bottom: 16px;
+  position: relative;
+}
+
+/* Comparison Arena header and presets */
+.comparison-arena-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.comparison-arena-title-flex {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.btn-preset-purple {
+  padding: 6px 14px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  background: rgba(139, 92, 246, 0.1);
+  border-color: rgba(139, 92, 246, 0.3);
+  color: var(--accent-purple);
+}
+.btn-preset-green {
+  padding: 6px 14px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: var(--accent-green);
+}
+
+/* Guide modal elements styling */
+.guide-modal-content {
+  max-width: 600px;
+}
+.guide-modal-header {
+  height: 120px;
+  background: linear-gradient(135deg, rgba(8, 22, 27, 0.95) 0%, rgba(12, 32, 37, 0.9) 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 24px;
+  border-bottom: 1.5px solid var(--border-color);
+}
+.guide-modal-subtitle {
+  font-family: var(--font-display);
+  font-size: 0.55rem;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  color: var(--accent-green);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.guide-modal-title {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: var(--text-primary);
+  margin: 0;
+  text-shadow: 0 0 10px var(--accent-green-glow);
+}
+.guide-modal-body {
+  padding: 24px;
+  max-height: 400px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  font-family: var(--font-sans);
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+.guide-modal-section-title {
+  color: var(--accent-gold);
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.guide-modal-text {
+  font-size: 0.8rem;
+}
+
+/* Custom form and other items */
+.form-row-grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.form-group-flex {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.form-label-style {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+}
+.form-input-style {
+  padding: 10px 14px;
+  background: rgba(7, 9, 14, 0.4);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  outline: none;
+}
+.form-input-style:focus {
+  border-color: var(--accent-green);
+}
+.form-submit-btn {
+  padding: 12px;
+  margin-top: 12px;
+  font-weight: 700;
+  background: rgba(70, 172, 211, 0.15);
+  border-color: rgba(70, 172, 211, 0.4);
+  color: var(--accent-green);
+  text-transform: uppercase;
+  cursor: pointer;
+  width: 100%;
+}
+
