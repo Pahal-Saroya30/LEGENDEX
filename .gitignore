@@ -1,0 +1,6 @@
+legendex-submission.zip
+.git/
+.gemini/
+.agents/
+.system_generated/
+*.log
